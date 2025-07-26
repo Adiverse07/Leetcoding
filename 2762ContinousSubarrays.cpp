@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution
+{
+
+#define ll long long
+
+public:
+    long long continuousSubarrays(vector<int> &nums)
+    {
+        int n = nums.size();
+        int left = 0;
+        int right; // will be used in for loop
+
+        int range_min = INT_MAX;
+        int range_max = INT_MIN;
+
+        ll count =0;
+        ll winSize;
+
+        for (right = 0; right < n; right++)
+        {
+            range_min = min(range_min, nums[right]);
+            range_max = max(range_max, nums[right]);
+
+            if (range_max-range_min>2)
+            {
+                winSize = right - left;
+                count += (winSize * (winSize + 1)) / 2;
+
+                left = right;
+
+                range_min = nums[right];
+                range_max = nums[right];
+
+                while (abs(nums[right] - nums[left - 1]) <= 2)
+                {
+                    left--;
+                    range_min = min(range_min, nums[left]);
+                    range_max = max(range_max, nums[left]);
+                }
+
+                if(left<right)
+                {
+                winSize = right-left;
+                count -= (winSize*(winSize+1))/2;
+                }
+                
+            }
+        }
+        winSize = right-left;
+        count += (winSize*(winSize+1))/2;
+
+        return count;
+    }
+};
+
+int main()
+{
+    Solution sl;
+    vector<int> arr = {5, 4, 2, 4};
+
+    cout << sl.continuousSubarrays(arr);
+}

@@ -1,0 +1,63 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution
+{
+    bool findLargestArray(vector<int> &res, vector<bool> &used, int pos, int n)
+    {
+        if (pos == (2 * n) - 1)
+            return true;
+
+        if (res[pos] != 0) // already filled
+            return findLargestArray(res, used, pos + 1, n);
+
+        for (int i = n; i >= 0; i--)
+        {
+            if (used[i])
+                continue; // if already used skip
+
+            used[i] = true;
+            res[pos] = i;
+
+            if (i == 1 and findLargestArray(res, used, pos + 1, n))
+                return true;
+
+            if (i > 1 and (pos + i) < (2 * n - 1) and res[pos + i] == 0)
+            {
+                res[pos + i] = i;
+
+                if(findLargestArray(res, used, pos+1, n))
+                return true;
+
+                res[pos+i] = 0;
+            }
+
+            used[i] = false;
+            res[pos] = 0;
+
+        }
+        return false;
+    }
+
+public:
+    vector<int> constructDistancedSequence(int n)
+    {
+        vector<int> res((2 * n) - 1, 0);
+        vector<bool> used(n, false);
+
+        findLargestArray(res, used, 0, n);
+        return res;
+    }
+};
+
+int main()
+{
+    int n = 5;
+    Solution sl;
+    vector<int> res = sl.constructDistancedSequence(n);
+
+    for (auto i : res)
+    {
+        cout << i << " ";
+    }
+}

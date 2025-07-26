@@ -1,0 +1,50 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    vector<bool> isArraySpecial(vector<int>& nums, vector<vector<int>>& queries) {
+        
+        int n = nums.size();
+
+        vector<int> prefixSum(n,0);
+
+        prefixSum[0] =1;
+
+        for(int i=1;i<n;++i)
+        {
+            if((nums[i]&1) == (nums[i-1]&1))
+                prefixSum[i] =1;
+            else
+                prefixSum[i] = 1+prefixSum[i-1];
+        }
+
+        vector <bool> ans;
+        for(auto& query: queries)
+        {
+            int start = query[0];
+            int end = query[1];
+            int size = end - start +1;
+
+            if(prefixSum[end]<size) ans.push_back(false);
+            else ans.push_back(true);
+
+        }
+        return ans;
+    }
+};
+
+int main()
+{
+ Solution sl;
+
+ vector<int> nums = {3,4,1,2,6};
+ vector<vector<int>> queries = {{0,4}};
+
+ vector<bool> result = sl.isArraySpecial(nums,queries);
+
+ for(auto i : result)
+ cout<<i<<" ";
+
+
+}
